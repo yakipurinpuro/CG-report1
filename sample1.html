@@ -23,10 +23,13 @@
         const scene = new THREE.Scene();
 
         // カメラを作成
-        const camera = new THREE.PerspectiveCamera(90, width / height);
+        const camera = new THREE.PerspectiveCamera(50, width / height);
         // カメラの初期座標を設定
         camera.position.set(1, 2, 5); //位置を指定
         camera.lookAt(0, 0, 0); //見つめる方向
+        
+        //カメラコントロールを作成
+        const controls = new THREE.OrbitControls(camera,document.body);
 
         // 平行光源1
         var directionalLight1 = new THREE.DirectionalLight(0xffffff);
@@ -47,11 +50,26 @@
 
         // 箱を作成
         var geometry = new THREE.BoxGeometry(1, 1, 1);
-        var material = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+        var material = new THREE.MeshPhongMaterial({ color: 0xffffff ,wireframe :true});
         var box = new THREE.Mesh(geometry, material);
         box.position.set(0,0,0); //位置を指定
         scene.add(box);   // シーンに追加
+        update();
 
+        // 円錐を作成
+        var coneGeometry = new THREE.CylinderGeometry( 0, 1, 1, 32);
+        var coneMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
+        var cone = new THREE.Mesh(coneGeometry, coneMaterial);
+        cone.position.set(0,0,2);
+        scene.add(cone);
+        update();
+
+        //　球を作成
+        var sphereGeometry = new THREE.SphereGeometry( 0.5, 32, 32);
+        var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00,wireframe:true} );
+        var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+        sphere.position.set(0,0,-2)
+        scene.add(sphere);
         update();
 
         // 毎フレーム時に実行されるループイベントです
@@ -59,9 +77,11 @@
           // レンダリング
           renderer.render(scene, camera);
           requestAnimationFrame(update);
+
           // 箱を回転させる
           box.rotation.x += 0.01;
           box.rotation.y += 0.01;
+          
         }
       }
     </script>
